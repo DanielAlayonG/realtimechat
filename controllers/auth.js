@@ -32,8 +32,11 @@ const login = async (email, password) => {
 
         return {
             error: 0,
-            token
+            token,
+            nombre: user.name,
+            type: user.type
         };
+        
     } catch (error) {
         return {
             error: 1,
