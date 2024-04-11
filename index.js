@@ -18,6 +18,10 @@ app.use(express.urlencoded({ extended: true }));
 //Routes
 app.use('/api', require('./routes'))
 
+app.use('/', (req,res) => {
+  res.send("hola  mundo")
+})
+
 let uri = "mongodb+srv://chatapp:Z2iVgbzPvb4JVp1z@cluster0.po7adqj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose.connect(uri, {
