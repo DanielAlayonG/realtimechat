@@ -12,6 +12,7 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const { guardarMensaje, obtenerHistorialMensajes } = require('./controllers/message');
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
@@ -63,8 +64,20 @@ io.on('connection', (socket) => {
   socket.on('message', (data) => {
     const { message, user, type} = data;
     const timestamp = formatDate(new Date()); // Formatea el timestamp
-    io.emit('message', { message, user, timestamp, type }); // Envía el mensaje junto con el timestamp
+    const response =  { message, user, timestamp, type }
+    guardarMensaje( response )
+    io.emit('message',response); // Envía el mensaje junto con el timestamp
   });
+
+  socket.on('historial', async () => {
+    try {
+      const historial = await obtenerHistorialMensajes();
+      socket.emit('historial', historial);
+    } catch (error) {
+      console.error('Error al obtener el historial de mensajes:', error);
+    }
+  });
+
 
   socket.on('disconnect', () => {
     console.log('user disconnected')
