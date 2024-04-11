@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const { guardarMensaje, obtenerHistorialMensajes } = require('./controllers/message');
+const { guardarMensaje, obtenerHistorialMensajes, eliminarMensaje } = require('./controllers/message');
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
@@ -78,6 +78,15 @@ io.on('connection', (socket) => {
     }
   });
 
+
+  socket.on('limpiarChat', async () => {
+    try {
+      const limpiarChat = await eliminarMensaje();
+      io.emit('limpiarChat', limpiarChat);
+    } catch (error) {
+      console.error('Error al eliminar el historial de mensajes:', error);
+    }
+  });
 
   socket.on('disconnect', () => {
     console.log('user disconnected')

@@ -4,8 +4,6 @@ const Message = require('../models/messages'); // Importa el modelo Message
 function guardarMensaje(data) {
     const { user, type, timestamp, message } = data;
 
-    console.log("aaaaaaaaaaaaaaaaaaaa")
-
     const nuevoMensaje = new Message({
         user: user, // ID del usuario que envió el mensaje
         type: type,
@@ -17,6 +15,17 @@ function guardarMensaje(data) {
     nuevoMensaje.save();
     return nuevoMensaje
 }
+
+
+const eliminarMensaje = async () => {
+    try {
+        await Message.deleteMany({});
+        return true;
+    } catch (error) {
+        console.error('Error al eliminar mensajes:', error);
+        return false;
+    }
+};
 
 
 const obtenerHistorialMensajes = async () => {
@@ -31,6 +40,6 @@ const obtenerHistorialMensajes = async () => {
 
 
 
-module.exports = { guardarMensaje, obtenerHistorialMensajes };
+module.exports = { guardarMensaje, obtenerHistorialMensajes, eliminarMensaje};
 
 
